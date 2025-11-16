@@ -1,0 +1,76 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  color-scheme: light;
+  color: #213547;
+  background-color: #ffffff;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+}
+
+#root {
+  width: 100%;
+  min-height: 100vh;
+}
+
+/* Swiper Navigation Styles */
+.swiper-button-next,
+.swiper-button-prev {
+  color: #10b981 !important;
+  background: white !important;
+  width: 35px !important;
+  height: 35px !important;
+  border-radius: 10px !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15) !important;
+  transition: all 0.3s !important;
+}
+
+.swiper-button-next:hover,
+.swiper-button-prev:hover {
+  background: #10b981 !important;
+  color: white !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3) !important;
+}
+
+.swiper-button-next::after,
+.swiper-button-prev::after {
+  font-size: 16px !important;
+  font-weight: 700 !important;
+}
+
+.swiper-pagination {
+  bottom: -30px !important;
+  position: relative !important;
+}
+
+.swiper-pagination-bullet {
+  background: #10b981 !important;
+  opacity: 0.3 !important;
+  width: 10px !important;
+  height: 10px !important;
+  transition: all 0.3s !important;
+}
+
+.swiper-pagination-bullet-active {
+  opacity: 1 !important;
+  width: 30px !important;
+  border-radius: 5px !important;
+}

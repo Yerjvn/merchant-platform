@@ -1,0 +1,653 @@
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { getFavorites } from '../utils/favorites';
+import './Profile.css';
+
+const Profile = () => {
+  const navigate = useNavigate();
+  const [activeTab, setActiveTab] = useState('overview');
+  const [showAddCard, setShowAddCard] = useState(false);
+  const [editingCard, setEditingCard] = useState(null);
+  const [favoriteIds, setFavoriteIds] = useState([]);
+
+  // Загрузка избранного при монтировании
+  useEffect(() => {
+    setFavoriteIds(getFavorites());
+    
+    // Слушаем обновления избранного
+    const handleFavoritesUpdate = () => {
+      setFavoriteIds(getFavorites());
+    };
+    
+    window.addEventListener('favoritesUpdated', handleFavoritesUpdate);
+    return () => window.removeEventListener('favoritesUpdated', handleFavoritesUpdate);
+  }, []);
+
+  // Мок-данные всех продуктов (для избранного)
+  const mockProducts = [
+    { id: 1, name: 'Яндекс Лавка - сервис доставки продуктов и готовой еды', description: 'Быстрая доставка продуктов и готовой еды', icon: '🛒', discount: 'Скидка 10%' },
+    { id: 2, name: 'Оформление карты зарубежного банка в CITORA', description: 'Международные банковские услуги', icon: '💳', discount: 'Бесплатное оформление' },
+    { id: 3, name: 'Цветы и подарки от Flowwow', description: 'Доставка цветов и подарков', icon: '🌹', discount: 'Скидка 15%' },
+    { id: 4, name: 'Квартиры на специальных условиях: скидки и акции от «Мангазеи»', description: 'Выгодные предложения на недвижимость', icon: '🏠', discount: 'Специальные условия' },
+    { id: 5, name: 'Образовательная платформа Нетология', description: 'Онлайн-курсы и обучение', icon: '📚', discount: 'Скидка 20%' },
+    { id: 6, name: 'Сервис химчистки Nikko', description: 'Химчистка и уборка', icon: '🧹', discount: 'Скидка 10%' },
+    { id: 7, name: 'Свежий кофе Tasty Coffee с бесплатной доставкой', description: 'Премиальный кофе с доставкой', icon: '☕', discount: 'Бесплатная доставка' },
+    { id: 8, name: 'Аудиотехника в магазинах Dr.Head', description: 'Профессиональная аудиотехника', icon: '🎧', discount: 'Скидка 15%' },
+    { id: 9, name: 'Сервис по заказу лекарств и товаров для красоты Здравсити', description: 'Доставка лекарств и косметики', icon: '💊', discount: 'Скидка 5%' },
+    { id: 10, name: 'Химчистка с доставкой и уборка квартир от Airo', description: 'Профессиональная уборка', icon: '🧽', discount: 'Скидка 20%' },
+    { id: 11, name: 'Яндекс Маркет', description: 'Огромный выбор товаров', icon: '🛍️', discount: 'Скидка 10%' },
+    { id: 12, name: 'Квартиры от VEREN GROUP', description: 'Премиальная недвижимость', icon: '🏘️', discount: 'Специальные условия' },
+  ];
+
+  const favoriteProducts = mockProducts.filter(product => favoriteIds.includes(product.id));
+
+  // Мок-данные партнера
+  const partnerInfo = {
+    id: 1,
+    name: 'Яндекс Лавка',
+    email: 'contact@yandexlavka.kz',
+    phone: '+7 (777) 123-45-67',
+    address: 'г. Алматы, ул. Розыбакиева, 247',
+    registrationDate: '15.03.2024',
+    status: 'Активный',
+    manager: {
+      name: 'Айгерим Серикова',
+      phone: '+7 (777) 999-88-77',
+      email: 'a.serikova@onlinebank.kz',
+    },
+  };
+
+  // Мок-данные тарифа
+  const currentTariff = {
+    name: 'Стандарт',
+    price: '120 000 ₸',
+    period: 'месяц',
+    priority: 3,
+    startDate: '01.11.2024',
+    endDate: '01.12.2024',
+    autoRenewal: true,
+  };
+
+  // Мок-данные аналитики
+  const analytics = {
+    totalViews: 12540,
+    totalClicks: 3210,
+    conversions: 856,
+    revenue: '2 450 000 ₸',
+    viewsChange: '+15%',
+    clicksChange: '+22%',
+    conversionsChange: '+18%',
+  };
+
+  // Мок-данные карточек
+  const [cards, setCards] = useState([
+    {
+      id: 1,
+      name: 'Яндекс Лавка - сервис доставки продуктов',
+      description: 'Быстрая доставка продуктов и готовой еды',
+      icon: '🛒',
+      image: null,
+      discount: 'Скидка 10%',
+      promoCode: 'ONLINEBANK10',
+      views: 8450,
+      clicks: 2100,
+      conversions: 580,
+      status: 'Активна',
+      createdAt: '15.03.2024',
+    },
+    {
+      id: 2,
+      name: 'Яндекс Лавка Премиум',
+      description: 'Премиум-доставка эксклюзивных продуктов',
+      icon: '🥂',
+      image: null,
+      discount: 'Скидка 15%',
+      promoCode: 'PREMIUM15',
+      views: 4090,
+      clicks: 1110,
+      conversions: 276,
+      status: 'Активна',
+      createdAt: '20.09.2024',
+    },
+  ]);
+
+  const [newCard, setNewCard] = useState({
+    name: '',
+    description: '',
+    discount: '',
+    promoCode: '',
+    image: null,
+    icon: '📦',
+  });
+
+  const handleImageUpload = (e, isEdit = false) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        if (isEdit && editingCard) {
+          setEditingCard({ ...editingCard, image: reader.result });
+        } else {
+          setNewCard({ ...newCard, image: reader.result });
+        }
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleAddCard = () => {
+    if (newCard.name && newCard.description) {
+      const card = {
+        id: cards.length + 1,
+        ...newCard,
+        views: 0,
+        clicks: 0,
+        conversions: 0,
+        status: 'Активна',
+        createdAt: new Date().toLocaleDateString('ru-RU'),
+      };
+      setCards([...cards, card]);
+      setNewCard({ name: '', description: '', discount: '', promoCode: '', image: null, icon: '📦' });
+      setShowAddCard(false);
+      alert('Карточка успешно добавлена!');
+    } else {
+      alert('Заполните обязательные поля');
+    }
+  };
+
+  const handleUpdateCard = () => {
+    if (editingCard) {
+      setCards(cards.map(card => card.id === editingCard.id ? editingCard : card));
+      setEditingCard(null);
+      alert('Карточка успешно обновлена!');
+    }
+  };
+
+  const handleDeleteCard = (cardId) => {
+    if (window.confirm('Вы уверены, что хотите удалить эту карточку?')) {
+      setCards(cards.filter(card => card.id !== cardId));
+    }
+  };
+
+  return (
+    <div className="profile-page">
+      <div className="profile-container">
+        {/* Sidebar */}
+        <aside className="profile-sidebar">
+          <div className="profile-avatar">
+            <div className="avatar-placeholder">{partnerInfo.name[0]}</div>
+          </div>
+          <h2 className="partner-name">{partnerInfo.name}</h2>
+          <p className="partner-status">{partnerInfo.status}</p>
+
+          <nav className="profile-nav">
+            <button
+              className={`nav-item ${activeTab === 'overview' ? 'active' : ''}`}
+              onClick={() => setActiveTab('overview')}
+            >
+              📊 Обзор
+            </button>
+            <button
+              className={`nav-item ${activeTab === 'cards' ? 'active' : ''}`}
+              onClick={() => setActiveTab('cards')}
+            >
+              🎴 Мои карточки
+            </button>
+            <button
+              className={`nav-item ${activeTab === 'favorites' ? 'active' : ''}`}
+              onClick={() => setActiveTab('favorites')}
+            >
+              ⭐ Избранное ({favoriteIds.length})
+            </button>
+            <button
+              className={`nav-item ${activeTab === 'analytics' ? 'active' : ''}`}
+              onClick={() => setActiveTab('analytics')}
+            >
+              📈 Аналитика
+            </button>
+            <button
+              className={`nav-item ${activeTab === 'tariff' ? 'active' : ''}`}
+              onClick={() => setActiveTab('tariff')}
+            >
+              💳 Мой тариф
+            </button>
+            <button
+              className={`nav-item ${activeTab === 'settings' ? 'active' : ''}`}
+              onClick={() => setActiveTab('settings')}
+            >
+              ⚙️ Настройки
+            </button>
+          </nav>
+
+          <button className="logout-button" onClick={() => navigate('/')}>
+            Выйти
+          </button>
+        </aside>
+
+        {/* Main Content */}
+        <main className="profile-main">
+          {/* Overview Tab */}
+          {activeTab === 'overview' && (
+            <div className="tab-content">
+              <h1>Обзор</h1>
+
+              <div className="stats-cards">
+                <div className="stat-card-small">
+                  <div className="stat-icon">👁️</div>
+                  <div className="stat-info">
+                    <div className="stat-value">{analytics.totalViews.toLocaleString()}</div>
+                    <div className="stat-label">Просмотры</div>
+                    <div className="stat-change positive">{analytics.viewsChange}</div>
+                  </div>
+                </div>
+                <div className="stat-card-small">
+                  <div className="stat-icon">👆</div>
+                  <div className="stat-info">
+                    <div className="stat-value">{analytics.totalClicks.toLocaleString()}</div>
+                    <div className="stat-label">Клики</div>
+                    <div className="stat-change positive">{analytics.clicksChange}</div>
+                  </div>
+                </div>
+                <div className="stat-card-small">
+                  <div className="stat-icon">✅</div>
+                  <div className="stat-info">
+                    <div className="stat-value">{analytics.conversions.toLocaleString()}</div>
+                    <div className="stat-label">Конверсии</div>
+                    <div className="stat-change positive">{analytics.conversionsChange}</div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="info-section">
+                <h2>Информация о партнере</h2>
+                <div className="info-grid">
+                  <div className="info-item">
+                    <span className="info-label">Email:</span>
+                    <span className="info-value">{partnerInfo.email}</span>
+                  </div>
+                  <div className="info-item">
+                    <span className="info-label">Телефон:</span>
+                    <span className="info-value">{partnerInfo.phone}</span>
+                  </div>
+                  <div className="info-item">
+                    <span className="info-label">Адрес:</span>
+                    <span className="info-value">{partnerInfo.address}</span>
+                  </div>
+                  <div className="info-item">
+                    <span className="info-label">Дата регистрации:</span>
+                    <span className="info-value">{partnerInfo.registrationDate}</span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="info-section">
+                <h2>Личный менеджер</h2>
+                <div className="info-grid">
+                  <div className="info-item">
+                    <span className="info-label">Имя:</span>
+                    <span className="info-value">{partnerInfo.manager.name}</span>
+                  </div>
+                  <div className="info-item">
+                    <span className="info-label">Телефон:</span>
+                    <span className="info-value">
+                      <a href={`tel:${partnerInfo.manager.phone}`} style={{ color: '#10b981', textDecoration: 'none' }}>
+                        {partnerInfo.manager.phone}
+                      </a>
+                    </span>
+                  </div>
+                  <div className="info-item">
+                    <span className="info-label">Email:</span>
+                    <span className="info-value">
+                      <a href={`mailto:${partnerInfo.manager.email}`} style={{ color: '#10b981', textDecoration: 'none' }}>
+                        {partnerInfo.manager.email}
+                      </a>
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="quick-tariff">
+                <h3>Текущий тариф: {currentTariff.name}</h3>
+                <p>Приоритет #{currentTariff.priority} • {currentTariff.price}/{currentTariff.period}</p>
+                <button onClick={() => setActiveTab('tariff')} className="view-tariff-btn">
+                  Подробнее
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* Cards Tab */}
+          {activeTab === 'cards' && (
+            <div className="tab-content">
+              <div className="tab-header">
+                <h1>Мои карточки ({cards.length})</h1>
+                <button className="add-card-btn" onClick={() => setShowAddCard(true)}>
+                  + Добавить карточку
+                </button>
+              </div>
+
+              <div className="cards-list">
+                {cards.map(card => (
+                  <div key={card.id} className="card-item">
+                    <div className="card-preview">
+                      {card.image ? (
+                        <img src={card.image} alt={card.name} />
+                      ) : (
+                        <div className="card-icon">{card.icon}</div>
+                      )}
+                    </div>
+                    <div className="card-details">
+                      <h3>{card.name}</h3>
+                      <p>{card.description}</p>
+                      <div className="card-meta">
+                        <span className="card-discount">{card.discount}</span>
+                        <span className="card-promo">Промокод: {card.promoCode}</span>
+                      </div>
+                      <div className="card-stats-mini">
+                        <span>👁️ {card.views}</span>
+                        <span>👆 {card.clicks}</span>
+                        <span>✅ {card.conversions}</span>
+                      </div>
+                    </div>
+                    <div className="card-actions">
+                      <button className="edit-btn" onClick={() => setEditingCard(card)}>
+                        ✏️ Редактировать
+                      </button>
+                      <button className="delete-btn" onClick={() => handleDeleteCard(card.id)}>
+                        🗑️ Удалить
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Add Card Modal */}
+              {showAddCard && (
+                <div className="modal-overlay" onClick={() => setShowAddCard(false)}>
+                  <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+                    <h2>Добавить новую карточку</h2>
+                    <form className="card-form" onSubmit={(e) => { e.preventDefault(); handleAddCard(); }}>
+                      <div className="form-group">
+                        <label>Название *</label>
+                        <input
+                          type="text"
+                          value={newCard.name}
+                          onChange={(e) => setNewCard({ ...newCard, name: e.target.value })}
+                          placeholder="Название услуги"
+                          required
+                        />
+                      </div>
+                      <div className="form-group">
+                        <label>Описание *</label>
+                        <textarea
+                          value={newCard.description}
+                          onChange={(e) => setNewCard({ ...newCard, description: e.target.value })}
+                          placeholder="Краткое описание"
+                          rows="3"
+                          required
+                        />
+                      </div>
+                      <div className="form-row">
+                        <div className="form-group">
+                          <label>Скидка</label>
+                          <input
+                            type="text"
+                            value={newCard.discount}
+                            onChange={(e) => setNewCard({ ...newCard, discount: e.target.value })}
+                            placeholder="Например: Скидка 10%"
+                          />
+                        </div>
+                        <div className="form-group">
+                          <label>Промокод</label>
+                          <input
+                            type="text"
+                            value={newCard.promoCode}
+                            onChange={(e) => setNewCard({ ...newCard, promoCode: e.target.value })}
+                            placeholder="PROMO2024"
+                          />
+                        </div>
+                      </div>
+                      <div className="form-group">
+                        <label>Изображение</label>
+                        <input
+                          type="file"
+                          accept="image/*"
+                          onChange={(e) => handleImageUpload(e)}
+                        />
+                        {newCard.image && (
+                          <div className="image-preview">
+                            <img src={newCard.image} alt="Preview" />
+                          </div>
+                        )}
+                      </div>
+                      <div className="form-actions">
+                        <button type="button" onClick={() => setShowAddCard(false)} className="cancel-btn">
+                          Отмена
+                        </button>
+                        <button type="submit" className="submit-btn">
+                          Добавить
+                        </button>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              )}
+
+              {/* Edit Card Modal */}
+              {editingCard && (
+                <div className="modal-overlay" onClick={() => setEditingCard(null)}>
+                  <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+                    <h2>Редактировать карточку</h2>
+                    <form className="card-form" onSubmit={(e) => { e.preventDefault(); handleUpdateCard(); }}>
+                      <div className="form-group">
+                        <label>Название *</label>
+                        <input
+                          type="text"
+                          value={editingCard.name}
+                          onChange={(e) => setEditingCard({ ...editingCard, name: e.target.value })}
+                          required
+                        />
+                      </div>
+                      <div className="form-group">
+                        <label>Описание *</label>
+                        <textarea
+                          value={editingCard.description}
+                          onChange={(e) => setEditingCard({ ...editingCard, description: e.target.value })}
+                          rows="3"
+                          required
+                        />
+                      </div>
+                      <div className="form-row">
+                        <div className="form-group">
+                          <label>Скидка</label>
+                          <input
+                            type="text"
+                            value={editingCard.discount}
+                            onChange={(e) => setEditingCard({ ...editingCard, discount: e.target.value })}
+                          />
+                        </div>
+                        <div className="form-group">
+                          <label>Промокод</label>
+                          <input
+                            type="text"
+                            value={editingCard.promoCode}
+                            onChange={(e) => setEditingCard({ ...editingCard, promoCode: e.target.value })}
+                          />
+                        </div>
+                      </div>
+                      <div className="form-group">
+                        <label>Изображение</label>
+                        <input
+                          type="file"
+                          accept="image/*"
+                          onChange={(e) => handleImageUpload(e, true)}
+                        />
+                        {editingCard.image && (
+                          <div className="image-preview">
+                            <img src={editingCard.image} alt="Preview" />
+                          </div>
+                        )}
+                      </div>
+                      <div className="form-actions">
+                        <button type="button" onClick={() => setEditingCard(null)} className="cancel-btn">
+                          Отмена
+                        </button>
+                        <button type="submit" className="submit-btn">
+                          Сохранить
+                        </button>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* Favorites Tab */}
+          {activeTab === 'favorites' && (
+            <div className="tab-content">
+              <h1>Избранное ({favoriteIds.length})</h1>
+              
+              {favoriteProducts.length > 0 ? (
+                <div className="favorites-grid">
+                  {favoriteProducts.map(product => (
+                    <div key={product.id} className="favorite-product-card" onClick={() => navigate(`/product/${product.id}`)}>
+                      <div className="favorite-product-image">
+                        {product.image ? (
+                          <img src={product.image} alt={product.name} />
+                        ) : (
+                          <div className="favorite-product-icon">{product.icon || '📦'}</div>
+                        )}
+                      </div>
+                      <div className="favorite-product-info">
+                        <h3>{product.name}</h3>
+                        <p>{product.description}</p>
+                        {product.discount && (
+                          <div className="favorite-product-discount">{product.discount}</div>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="no-favorites">
+                  <div className="no-favorites-icon">⭐</div>
+                  <h2>У вас пока нет избранных предложений</h2>
+                  <p>Нажмите на звездочку на карточке товара, чтобы добавить его в избранное</p>
+                  <button onClick={() => navigate('/')} className="browse-button">
+                    Посмотреть предложения
+                  </button>
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* Analytics Tab */}
+          {activeTab === 'analytics' && (
+            <div className="tab-content">
+              <h1>Аналитика</h1>
+              <div className="analytics-section">
+                <h2>Статистика использования услуг</h2>
+                <div className="analytics-cards">
+                  {cards.map(card => (
+                    <div key={card.id} className="analytics-card">
+                      <h3>{card.name}</h3>
+                      <div className="analytics-stats">
+                        <div className="analytics-item">
+                          <span className="analytics-label">Просмотры:</span>
+                          <span className="analytics-value">{card.views.toLocaleString()}</span>
+                        </div>
+                        <div className="analytics-item">
+                          <span className="analytics-label">Клики:</span>
+                          <span className="analytics-value">{card.clicks.toLocaleString()}</span>
+                        </div>
+                        <div className="analytics-item">
+                          <span className="analytics-label">Конверсии:</span>
+                          <span className="analytics-value">{card.conversions.toLocaleString()}</span>
+                        </div>
+                        <div className="analytics-item">
+                          <span className="analytics-label">CTR:</span>
+                          <span className="analytics-value">{((card.clicks / card.views) * 100).toFixed(2)}%</span>
+                        </div>
+                        <div className="analytics-item">
+                          <span className="analytics-label">Conversion Rate:</span>
+                          <span className="analytics-value">{((card.conversions / card.clicks) * 100).toFixed(2)}%</span>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Tariff Tab */}
+          {activeTab === 'tariff' && (
+            <div className="tab-content">
+              <h1>Мой тариф</h1>
+              <div className="current-tariff-info">
+                <div className="tariff-card-large">
+                  <h2>{currentTariff.name}</h2>
+                  <div className="tariff-price-large">{currentTariff.price}/{currentTariff.period}</div>
+                  <div className="tariff-details">
+                    <div className="tariff-detail">
+                      <span>Приоритет:</span>
+                      <span>#{currentTariff.priority}</span>
+                    </div>
+                    <div className="tariff-detail">
+                      <span>Дата начала:</span>
+                      <span>{currentTariff.startDate}</span>
+                    </div>
+                    <div className="tariff-detail">
+                      <span>Дата окончания:</span>
+                      <span>{currentTariff.endDate}</span>
+                    </div>
+                    <div className="tariff-detail">
+                      <span>Автопродление:</span>
+                      <span>{currentTariff.autoRenewal ? 'Включено' : 'Выключено'}</span>
+                    </div>
+                  </div>
+                  <button className="upgrade-btn" onClick={() => navigate('/become-partner')}>
+                    Изменить тариф
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Settings Tab */}
+          {activeTab === 'settings' && (
+            <div className="tab-content">
+              <h1>Настройки</h1>
+              <div className="settings-section">
+                <h2>Информация о компании</h2>
+                <form className="settings-form">
+                  <div className="form-group">
+                    <label>Название компании</label>
+                    <input type="text" defaultValue={partnerInfo.name} />
+                  </div>
+                  <div className="form-group">
+                    <label>Email</label>
+                    <input type="email" defaultValue={partnerInfo.email} />
+                  </div>
+                  <div className="form-group">
+                    <label>Телефон</label>
+                    <input type="tel" defaultValue={partnerInfo.phone} />
+                  </div>
+                  <div className="form-group">
+                    <label>Адрес</label>
+                    <input type="text" defaultValue={partnerInfo.address} />
+                  </div>
+                  <button type="submit" className="save-btn">Сохранить изменения</button>
+                </form>
+              </div>
+            </div>
+          )}
+        </main>
+      </div>
+    </div>
+  );
+};
+
+export default Profile;
+
