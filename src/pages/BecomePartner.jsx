@@ -80,12 +80,16 @@ const BecomePartner = () => {
   ];
 
   const partners = [
-    { name: 'Яндекс', logo: '🟡' },
-    { name: 'Flowwow', logo: '🌸' },
-    { name: 'Нетология', logo: '📚' },
-    { name: 'CITORA', logo: '💳' },
-    { name: 'Tasty Coffee', logo: '☕' },
-    { name: 'Dr.Head', logo: '🎧' },
+    { name: 'Казахтелеком', logo: '📡' },
+    { name: 'Air Astana', logo: '✈️' },
+    { name: 'Beeline KZ', logo: '📱' },
+    { name: 'KEGOC', logo: '⚡' },
+    { name: 'Казпочта', logo: '📮' },
+    { name: 'Tele2 KZ', logo: '📞' },
+    { name: 'БАЗИС А', logo: '🏢' },
+    { name: 'Samruk-Kazyna', logo: '🏛️' },
+    { name: 'KazMunayGas', logo: '⛽' },
+    { name: 'KPMG Kazakhstan', logo: '💼' },
   ];
 
   const handleTariffSelect = (tariffId) => {
