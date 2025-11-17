@@ -86,6 +86,25 @@
   font-weight: 600;
 }
 
+.toggle-role-button {
+  width: 100%;
+  padding: 0.875rem;
+  background: #ff9500;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s;
+  margin-bottom: 0.5rem;
+  margin-top: auto;
+}
+
+.toggle-role-button:hover {
+  background: #e68500;
+}
+
 .logout-button {
   width: 100%;
   padding: 0.875rem;

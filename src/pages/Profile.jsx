@@ -254,18 +254,6 @@ const Profile = () => {
           <button 
             className="toggle-role-button" 
             onClick={() => toggleUserRole()}
-            style={{
-              marginTop: 'auto',
-              padding: '0.75rem',
-              background: '#ff9500',
-              color: 'white',
-              border: 'none',
-              borderRadius: '8px',
-              cursor: 'pointer',
-              fontSize: '0.875rem',
-              fontWeight: '600',
-              marginBottom: '0.5rem'
-            }}
           >
             {userIsPartner ? '👤 Режим клиента' : '🏢 Режим партнера'}
           </button>
