@@ -13,6 +13,8 @@ const BecomePartner = () => {
   });
   const [logo, setLogo] = useState(null);
   const [logoPreview, setLogoPreview] = useState(null);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [submittedEmail, setSubmittedEmail] = useState('');
   const applicationFormRef = useRef(null);
 
   const stats = [
@@ -152,7 +154,11 @@ const BecomePartner = () => {
       logo: logo
     });
 
-    alert('Заявка успешно отправлена! Наш менеджер свяжется с вами в ближайшее время.');
+    // Сохраняем email перед сбросом формы
+    setSubmittedEmail(formData.email);
+
+    // Показываем модальное окно успеха
+    setShowSuccessModal(true);
     
     // Сброс формы
     setFormData({
@@ -166,6 +172,9 @@ const BecomePartner = () => {
     setLogo(null);
     setLogoPreview(null);
     setSelectedTariff(null);
+
+    // Скролл наверх
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const getSelectedTariffName = () => {
@@ -173,8 +182,42 @@ const BecomePartner = () => {
     return tariff ? tariff.name : '';
   };
 
+  const handleCloseSuccessModal = () => {
+    setShowSuccessModal(false);
+  };
+
   return (
     <div className="become-partner-page">
+      {/* Success Modal */}
+      {showSuccessModal && (
+        <div className="modal-overlay" onClick={handleCloseSuccessModal}>
+          <div className="success-modal" onClick={(e) => e.stopPropagation()}>
+            <div className="success-icon-container">
+              <div className="success-checkmark">
+                <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                  <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                </svg>
+              </div>
+            </div>
+            <h2>Ваша заявка отправлена на проверку!</h2>
+            <p>Спасибо за интерес к нашей платформе. Наш менеджер свяжется с вами в течение 24 часов для обсуждения деталей сотрудничества.</p>
+            <div className="success-details">
+              <div className="detail-item">
+                <span className="detail-icon">📧</span>
+                <span>Проверьте почту {submittedEmail}</span>
+              </div>
+              <div className="detail-item">
+                <span className="detail-icon">📞</span>
+                <span>Ожидайте звонка по указанному номеру</span>
+              </div>
+            </div>
+            <button className="success-button" onClick={handleCloseSuccessModal}>
+              Понятно
+            </button>
+          </div>
+        </div>
+      )}
       {/* Hero Section */}
       <section className="hero-section">
         <div className="hero-content">
