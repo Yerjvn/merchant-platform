@@ -88,8 +88,10 @@ const Profile = () => {
   const analytics = {
     totalViews: 12540,
     totalClicks: 3210,
+    conversions: 856,
     viewsChange: '+15%',
     clicksChange: '+22%',
+    conversionsChange: '+18%',
   };
 
   // Мок-данные карточек
@@ -282,6 +284,14 @@ const Profile = () => {
                     <div className="stat-value">{analytics.totalClicks.toLocaleString()}</div>
                     <div className="stat-label">Клики</div>
                     <div className="stat-change positive">{analytics.clicksChange}</div>
+                  </div>
+                </div>
+                <div className="stat-card-small">
+                  <div className="stat-icon">✅</div>
+                  <div className="stat-info">
+                    <div className="stat-value">{analytics.conversions.toLocaleString()}</div>
+                    <div className="stat-label">Конверсии</div>
+                    <div className="stat-change positive">{analytics.conversionsChange}</div>
                   </div>
                 </div>
               </div>
