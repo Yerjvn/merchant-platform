@@ -1,27 +1,42 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getFavorites } from '../utils/favorites';
+import { isPartner, toggleUserRole } from '../utils/userRole';
 import './Profile.css';
 import kazakhtelecomBanner from '../assets/Kazakhtelecom Banner 800x450.webp';
 
 const Profile = () => {
   const navigate = useNavigate();
-  const [activeTab, setActiveTab] = useState('overview');
+  const [activeTab, setActiveTab] = useState(isPartner() ? 'overview' : 'favorites');
   const [showAddCard, setShowAddCard] = useState(false);
   const [editingCard, setEditingCard] = useState(null);
   const [favoriteIds, setFavoriteIds] = useState([]);
+  const [userIsPartner, setUserIsPartner] = useState(isPartner());
 
   // Загрузка избранного при монтировании
   useEffect(() => {
     setFavoriteIds(getFavorites());
+    setUserIsPartner(isPartner());
     
     // Слушаем обновления избранного
     const handleFavoritesUpdate = () => {
       setFavoriteIds(getFavorites());
     };
+
+    // Слушаем изменения роли пользователя
+    const handleRoleChange = () => {
+      const newIsPartner = isPartner();
+      setUserIsPartner(newIsPartner);
+      // Переключаем активную вкладку в зависимости от роли
+      setActiveTab(newIsPartner ? 'overview' : 'favorites');
+    };
     
     window.addEventListener('favoritesUpdated', handleFavoritesUpdate);
-    return () => window.removeEventListener('favoritesUpdated', handleFavoritesUpdate);
+    window.addEventListener('userRoleChanged', handleRoleChange);
+    return () => {
+      window.removeEventListener('favoritesUpdated', handleFavoritesUpdate);
+      window.removeEventListener('userRoleChanged', handleRoleChange);
+    };
   }, []);
 
   // Мок-данные всех продуктов (для избранного)
@@ -176,42 +191,57 @@ const Profile = () => {
         {/* Sidebar */}
         <aside className="profile-sidebar">
           <div className="profile-avatar">
-            <div className="avatar-placeholder">{partnerInfo.name[0]}</div>
+            <div className="avatar-placeholder">{userIsPartner ? partnerInfo.name[0] : 'К'}</div>
           </div>
-          <h2 className="partner-name">{partnerInfo.name}</h2>
-          <p className="partner-status">{partnerInfo.status}</p>
+          <h2 className="partner-name">{userIsPartner ? partnerInfo.name : 'Клиент'}</h2>
+          <p className="partner-status">{userIsPartner ? partnerInfo.status : 'Активный клиент'}</p>
 
           <nav className="profile-nav">
-            <button
-              className={`nav-item ${activeTab === 'overview' ? 'active' : ''}`}
-              onClick={() => setActiveTab('overview')}
-            >
-              📊 Обзор
-            </button>
-            <button
-              className={`nav-item ${activeTab === 'cards' ? 'active' : ''}`}
-              onClick={() => setActiveTab('cards')}
-            >
-              🎴 Мои карточки
-            </button>
+            {/* Вкладки только для партнеров */}
+            {userIsPartner && (
+              <>
+                <button
+                  className={`nav-item ${activeTab === 'overview' ? 'active' : ''}`}
+                  onClick={() => setActiveTab('overview')}
+                >
+                  📊 Обзор
+                </button>
+                <button
+                  className={`nav-item ${activeTab === 'cards' ? 'active' : ''}`}
+                  onClick={() => setActiveTab('cards')}
+                >
+                  🎴 Мои карточки
+                </button>
+              </>
+            )}
+            
+            {/* Избранное для всех */}
             <button
               className={`nav-item ${activeTab === 'favorites' ? 'active' : ''}`}
               onClick={() => setActiveTab('favorites')}
             >
               ⭐ Избранное ({favoriteIds.length})
             </button>
-            <button
-              className={`nav-item ${activeTab === 'analytics' ? 'active' : ''}`}
-              onClick={() => setActiveTab('analytics')}
-            >
-              📈 Аналитика
-            </button>
-            <button
-              className={`nav-item ${activeTab === 'tariff' ? 'active' : ''}`}
-              onClick={() => setActiveTab('tariff')}
-            >
-              💳 Мой тариф
-            </button>
+            
+            {/* Вкладки только для партнеров */}
+            {userIsPartner && (
+              <>
+                <button
+                  className={`nav-item ${activeTab === 'analytics' ? 'active' : ''}`}
+                  onClick={() => setActiveTab('analytics')}
+                >
+                  📈 Аналитика
+                </button>
+                <button
+                  className={`nav-item ${activeTab === 'tariff' ? 'active' : ''}`}
+                  onClick={() => setActiveTab('tariff')}
+                >
+                  💳 Мой тариф
+                </button>
+              </>
+            )}
+            
+            {/* Настройки для всех */}
             <button
               className={`nav-item ${activeTab === 'settings' ? 'active' : ''}`}
               onClick={() => setActiveTab('settings')}
@@ -220,6 +250,26 @@ const Profile = () => {
             </button>
           </nav>
 
+          {/* Кнопка для переключения роли (для тестирования) */}
+          <button 
+            className="toggle-role-button" 
+            onClick={() => toggleUserRole()}
+            style={{
+              marginTop: 'auto',
+              padding: '0.75rem',
+              background: '#ff9500',
+              color: 'white',
+              border: 'none',
+              borderRadius: '8px',
+              cursor: 'pointer',
+              fontSize: '0.875rem',
+              fontWeight: '600',
+              marginBottom: '0.5rem'
+            }}
+          >
+            {userIsPartner ? '👤 Режим клиента' : '🏢 Режим партнера'}
+          </button>
+
           <button className="logout-button" onClick={() => navigate('/')}>
             Выйти
           </button>
@@ -227,8 +277,8 @@ const Profile = () => {
 
         {/* Main Content */}
         <main className="profile-main">
-          {/* Overview Tab */}
-          {activeTab === 'overview' && (
+          {/* Overview Tab - только для партнеров */}
+          {userIsPartner && activeTab === 'overview' && (
             <div className="tab-content">
               <h1>Обзор</h1>
 
@@ -317,8 +367,8 @@ const Profile = () => {
             </div>
           )}
 
-          {/* Cards Tab */}
-          {activeTab === 'cards' && (
+          {/* Cards Tab - только для партнеров */}
+          {userIsPartner && activeTab === 'cards' && (
             <div className="tab-content">
               <div className="tab-header">
                 <h1>Мои карточки ({cards.length})</h1>
@@ -543,8 +593,8 @@ const Profile = () => {
             </div>
           )}
 
-          {/* Analytics Tab */}
-          {activeTab === 'analytics' && (
+          {/* Analytics Tab - только для партнеров */}
+          {userIsPartner && activeTab === 'analytics' && (
             <div className="tab-content">
               <h1>Аналитика</h1>
               <div className="analytics-section">
@@ -582,8 +632,8 @@ const Profile = () => {
             </div>
           )}
 
-          {/* Tariff Tab */}
-          {activeTab === 'tariff' && (
+          {/* Tariff Tab - только для партнеров */}
+          {userIsPartner && activeTab === 'tariff' && (
             <div className="tab-content">
               <h1>Мой тариф</h1>
               <div className="current-tariff-info">

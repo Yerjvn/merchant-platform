@@ -1,12 +1,24 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import onlineBankLogo from '../assets/online-bank-logo.svg';
+import { isPartner } from '../utils/userRole';
 import './Header.css';
 
 const Header = () => {
   const [searchQuery, setSearchQuery] = useState('');
+  const [userIsPartner, setUserIsPartner] = useState(isPartner());
   const navigate = useNavigate();
   const location = useLocation();
+
+  // Слушаем изменения роли пользователя
+  useEffect(() => {
+    const handleRoleChange = () => {
+      setUserIsPartner(isPartner());
+    };
+
+    window.addEventListener('userRoleChanged', handleRoleChange);
+    return () => window.removeEventListener('userRoleChanged', handleRoleChange);
+  }, []);
 
   const handleSearch = (e) => {
     e.preventDefault();
@@ -50,12 +62,14 @@ const Header = () => {
           </button>
         </form>
         <div className="header-actions">
-          <button 
-            className="partner-button" 
-            onClick={() => navigate('/become-partner')}
-          >
-            Стать партнером
-          </button>
+          {!userIsPartner && (
+            <button 
+              className="partner-button" 
+              onClick={() => navigate('/become-partner')}
+            >
+              Стать партнером
+            </button>
+          )}
           <button 
             className="profile-button"
             onClick={() => navigate('/profile')}
