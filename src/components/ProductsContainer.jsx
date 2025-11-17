@@ -1,6 +1,7 @@
 import { useState, useMemo } from 'react';
 import ProductCard from './ProductCard';
 import './ProductsContainer.css';
+import kazakhtelecomBanner from '../assets/Kazakhtelecom Banner 800x450.webp';
 
 const mockProducts = [
   {
@@ -8,6 +9,7 @@ const mockProducts = [
     name: 'Казахтелеком - корпоративная связь и интернет',
     description: 'Высокоскоростной интернет и телефония для бизнеса',
     icon: '📡',
+    image: kazakhtelecomBanner,
     discount: 'Скидка 15% на годовое обслуживание',
   },
   {
