@@ -47,15 +47,20 @@ const ProductCard = ({ product }) => {
         </button>
       </div>
       <div className="product-info">
-        <h3 className="product-name">{product.name}</h3>
+        <div className="product-company">{product.name}</div>
+        {product.discount && (
+          <h3 className="product-offer">{product.discount}</h3>
+        )}
         {product.description && (
           <p className="product-description">{product.description}</p>
         )}
-        {product.discount && (
-          <div className="product-discount">{product.discount}</div>
-        )}
       </div>
-      <button className="product-button">Подробнее</button>
+      <button className="product-button">
+        Подробнее
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M5 12h14M12 5l7 7-7 7"/>
+        </svg>
+      </button>
     </div>
   );
 };
