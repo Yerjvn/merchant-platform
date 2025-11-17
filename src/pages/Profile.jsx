@@ -9,6 +9,7 @@ import itConsultingImage from '../assets/it-consulting.png';
 import remontImage from '../assets/remont.jpg';
 import designStudioImage from '../assets/design-studio.png';
 import skillboxImage from '../assets/skillbox.png';
+import cleaningImage from '../assets/cleaning.jpg';
 import fitnessImage from '../assets/fitnes.jpg';
 import yogaImage from '../assets/йога.jpg';
 import asanaImage from '../assets/Asana Productivity.png';
@@ -57,7 +58,7 @@ const Profile = () => {
     { id: 4, name: 'Ремонт офисов "под ключ" от Stroy Master', description: 'Комплексный ремонт коммерческих помещений', icon: '🔨', image: remontImage, discount: 'Скидка 10% на проект' },
     { id: 5, name: 'Дизайн-студия INTERIOR.KZ', description: 'Дизайн-проекты офисов и коммерческих пространств', icon: '🎨', image: designStudioImage, discount: 'Скидка 20% на дизайн-проект' },
     { id: 6, name: 'Платформа онлайн-обучения Skillbox Kazakhstan', description: 'Корпоративное обучение сотрудников', icon: '📚', image: skillboxImage, discount: 'Скидка 25% на корпоративные пакеты' },
-    { id: 7, name: 'CleanPro - клининговые услуги для офисов', description: 'Уборка и химчистка офисных помещений', icon: '🧹', discount: 'Скидка 15% при договоре от 6 месяцев' },
+    { id: 7, name: 'CleanPro - клининговые услуги для офисов', description: 'Уборка и химчистка офисных помещений', icon: '🧹', image: cleaningImage, discount: 'Скидка 15% при договоре от 6 месяцев' },
     { id: 8, name: 'Корпоративный фитнес - FitLife', description: 'Онлайн-тренировки и абонементы для сотрудников', icon: '💪', image: fitnessImage, discount: 'Скидка 30% на корпоративные абонементы' },
     { id: 9, name: 'Йога-студия Namaste Almaty', description: 'Йога и пилатес для снятия стресса сотрудников', icon: '🧘', image: yogaImage, discount: 'Скидка 20% на групповые занятия' },
     { id: 10, name: 'Asana Productivity - повышение эффективности', description: 'Инструменты управления проектами и продуктивности', icon: '📊', image: asanaImage, discount: 'Скидка 25% на годовую подписку' },

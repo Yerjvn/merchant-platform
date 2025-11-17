@@ -7,6 +7,7 @@ import itConsultingImage from '../assets/it-consulting.png';
 import remontImage from '../assets/remont.jpg';
 import designStudioImage from '../assets/design-studio.png';
 import skillboxImage from '../assets/skillbox.png';
+import cleaningImage from '../assets/cleaning.jpg';
 import fitnessImage from '../assets/fitnes.jpg';
 import yogaImage from '../assets/йога.jpg';
 import asanaImage from '../assets/Asana Productivity.png';
@@ -67,6 +68,7 @@ const mockProducts = [
     name: 'CleanPro - клининговые услуги для офисов',
     description: 'Уборка и химчистка офисных помещений',
     icon: '🧹',
+    image: cleaningImage,
     discount: 'Скидка 15% при договоре от 6 месяцев',
   },
   {
