@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import './ProductDetail.css';
 import kazakhtelecomBanner from '../assets/Kazakhtelecom Banner 800x450.webp';
@@ -141,6 +142,7 @@ const mockProductsData = {
 const ProductDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const [isActivated, setIsActivated] = useState(false);
   const product = mockProductsData[id];
 
   if (!product) {
@@ -159,6 +161,10 @@ const ProductDetail = () => {
   const copyPromoCode = () => {
     navigator.clipboard.writeText(product.promoCode);
     alert('Промокод скопирован!');
+  };
+
+  const handleActivate = () => {
+    setIsActivated(true);
   };
 
   return (
@@ -190,31 +196,37 @@ const ProductDetail = () => {
             <p>{product.fullDescription}</p>
           </div>
 
-          <div className="product-detail-section promo-section">
-            <h2>Наше предложение для вас</h2>
-            <p className="partner-offer">{product.partnerOffer}</p>
-            
-            <div className="promo-code-block">
-              <div className="promo-code-label">Промокод:</div>
-              <div className="promo-code-wrapper">
-                <span className="promo-code">{product.promoCode}</span>
-                <button onClick={copyPromoCode} className="copy-button">
-                  Копировать
-                </button>
+          {!isActivated ? (
+            <button className="activate-button" onClick={handleActivate}>
+              Активировать предложение
+            </button>
+          ) : (
+            <>
+              <div className="product-detail-section promo-section">
+                <h2>Наше предложение для вас</h2>
+                <p className="partner-offer">{product.partnerOffer}</p>
+                
+                <div className="promo-code-block">
+                  <div className="promo-code-label">Промокод:</div>
+                  <div className="promo-code-wrapper">
+                    <span className="promo-code">{product.promoCode}</span>
+                    <button onClick={copyPromoCode} className="copy-button">
+                      Копировать
+                    </button>
+                  </div>
+                </div>
               </div>
-            </div>
-          </div>
 
-          <div className="product-detail-section">
-            <h2>Условия предложения</h2>
-            <ul className="terms-list">
-              {product.terms.map((term, index) => (
-                <li key={index}>{term}</li>
-              ))}
-            </ul>
-          </div>
-
-          <button className="activate-button">Активировать предложение</button>
+              <div className="product-detail-section">
+                <h2>Условия предложения</h2>
+                <ul className="terms-list">
+                  {product.terms.map((term, index) => (
+                    <li key={index}>{term}</li>
+                  ))}
+                </ul>
+              </div>
+            </>
+          )}
         </div>
       </div>
     </div>

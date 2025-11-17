@@ -88,11 +88,8 @@ const Profile = () => {
   const analytics = {
     totalViews: 12540,
     totalClicks: 3210,
-    conversions: 856,
-    revenue: '2 450 000 ₸',
     viewsChange: '+15%',
     clicksChange: '+22%',
-    conversionsChange: '+18%',
   };
 
   // Мок-данные карточек
@@ -287,14 +284,6 @@ const Profile = () => {
                     <div className="stat-change positive">{analytics.clicksChange}</div>
                   </div>
                 </div>
-                <div className="stat-card-small">
-                  <div className="stat-icon">✅</div>
-                  <div className="stat-info">
-                    <div className="stat-value">{analytics.conversions.toLocaleString()}</div>
-                    <div className="stat-label">Конверсии</div>
-                    <div className="stat-change positive">{analytics.conversionsChange}</div>
-                  </div>
-                </div>
               </div>
 
               <div className="info-section">
@@ -385,7 +374,6 @@ const Profile = () => {
                       <div className="card-stats-mini">
                         <span>👁️ {card.views}</span>
                         <span>👆 {card.clicks}</span>
-                        <span>✅ {card.conversions}</span>
                       </div>
                     </div>
                     <div className="card-actions">
@@ -601,16 +589,8 @@ const Profile = () => {
                           <span className="analytics-value">{card.clicks.toLocaleString()}</span>
                         </div>
                         <div className="analytics-item">
-                          <span className="analytics-label">Конверсии:</span>
-                          <span className="analytics-value">{card.conversions.toLocaleString()}</span>
-                        </div>
-                        <div className="analytics-item">
                           <span className="analytics-label">CTR:</span>
                           <span className="analytics-value">{((card.clicks / card.views) * 100).toFixed(2)}%</span>
-                        </div>
-                        <div className="analytics-item">
-                          <span className="analytics-label">Conversion Rate:</span>
-                          <span className="analytics-value">{((card.conversions / card.clicks) * 100).toFixed(2)}%</span>
                         </div>
                       </div>
                     </div>
