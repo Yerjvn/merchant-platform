@@ -2,6 +2,8 @@ import { useState, useMemo } from 'react';
 import ProductCard from './ProductCard';
 import './ProductsContainer.css';
 import kazakhtelecomBanner from '../assets/Kazakhtelecom Banner 800x450.webp';
+import biGroupImage from '../assets/bi-group.jpg';
+import itConsultingImage from '../assets/it-consulting.png';
 
 const mockProducts = [
   {
@@ -17,13 +19,15 @@ const mockProducts = [
     name: 'IT-консалтинг от Digital Solutions KZ',
     description: 'Цифровая трансформация и автоматизация бизнеса',
     icon: '💻',
+    image: itConsultingImage,
     discount: 'Первая консультация бесплатно',
   },
   {
     id: 3,
-    name: 'Коммерческая недвижимость от БАЗИС А',
+    name: 'Коммерческая недвижимость от BI GROUP',
     description: 'Офисные и торговые помещения в центре Алматы',
     icon: '🏢',
+    image: biGroupImage,
     discount: 'Специальные условия для ТОО',
   },
   {

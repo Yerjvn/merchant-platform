@@ -121,7 +121,7 @@ const BecomePartner = () => {
     { name: 'KEGOC', logo: '⚡' },
     { name: 'Казпочта', logo: '📮' },
     { name: 'Tele2 KZ', logo: '📞' },
-    { name: 'БАЗИС А', logo: '🏢' },
+    { name: 'BI GROUP', logo: '🏢' },
     { name: 'Samruk-Kazyna', logo: '🏛️' },
     { name: 'KazMunayGas', logo: '⛽' },
     { name: 'KPMG Kazakhstan', logo: '💼' },
