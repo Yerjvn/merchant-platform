@@ -1,8 +1,19 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import './BecomePartner.css';
 
 const BecomePartner = () => {
   const [selectedTariff, setSelectedTariff] = useState(null);
+  const [formData, setFormData] = useState({
+    companyName: '',
+    bin: '',
+    contactPerson: '',
+    phone: '',
+    email: '',
+    description: '',
+  });
+  const [logo, setLogo] = useState(null);
+  const [logoPreview, setLogoPreview] = useState(null);
+  const applicationFormRef = useRef(null);
 
   const stats = [
     { value: '500K+', label: 'Активных пользователей' },
@@ -94,7 +105,72 @@ const BecomePartner = () => {
 
   const handleTariffSelect = (tariffId) => {
     setSelectedTariff(tariffId);
-    // Здесь можно добавить логику отправки формы
+    // Скролл к форме заявки
+    setTimeout(() => {
+      applicationFormRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 100);
+  };
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
+  const handleLogoUpload = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setLogo(file);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setLogoPreview(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleSubmitApplication = (e) => {
+    e.preventDefault();
+    
+    // Валидация
+    if (!formData.companyName || !formData.bin || !formData.contactPerson || !formData.phone || !formData.email) {
+      alert('Пожалуйста, заполните все обязательные поля');
+      return;
+    }
+
+    if (!selectedTariff) {
+      alert('Пожалуйста, выберите тариф');
+      return;
+    }
+
+    // Здесь будет отправка на сервер
+    console.log('Данные заявки:', {
+      ...formData,
+      tariffId: selectedTariff,
+      logo: logo
+    });
+
+    alert('Заявка успешно отправлена! Наш менеджер свяжется с вами в ближайшее время.');
+    
+    // Сброс формы
+    setFormData({
+      companyName: '',
+      bin: '',
+      contactPerson: '',
+      phone: '',
+      email: '',
+      description: '',
+    });
+    setLogo(null);
+    setLogoPreview(null);
+    setSelectedTariff(null);
+  };
+
+  const getSelectedTariffName = () => {
+    const tariff = tariffs.find(t => t.id === selectedTariff);
+    return tariff ? tariff.name : '';
   };
 
   return (
@@ -212,6 +288,169 @@ const BecomePartner = () => {
           ))}
         </div>
       </section>
+
+      {/* Application Form Section */}
+      {selectedTariff && (
+        <section className="application-form-section" ref={applicationFormRef}>
+          <div className="form-container">
+            <div className="form-header">
+              <h2>Оставить заявку на тариф "{getSelectedTariffName()}"</h2>
+              <p>Заполните форму, и наш менеджер свяжется с вами для заключения договора</p>
+            </div>
+
+            <form onSubmit={handleSubmitApplication} className="application-form">
+              {/* Логотип компании */}
+              <div className="form-section">
+                <h3>Логотип компании</h3>
+                <div className="logo-upload-area">
+                  <input
+                    type="file"
+                    id="logo-upload"
+                    accept="image/*"
+                    onChange={handleLogoUpload}
+                    className="logo-input"
+                  />
+                  <label htmlFor="logo-upload" className="logo-upload-label">
+                    {logoPreview ? (
+                      <div className="logo-preview">
+                        <img src={logoPreview} alt="Логотип компании" />
+                        <div className="logo-overlay">
+                          <span>Изменить логотип</span>
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="logo-placeholder">
+                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                          <polyline points="17 8 12 3 7 8"></polyline>
+                          <line x1="12" y1="3" x2="12" y2="15"></line>
+                        </svg>
+                        <span>Загрузить логотип</span>
+                        <small>PNG, JPG, SVG до 5 МБ</small>
+                      </div>
+                    )}
+                  </label>
+                </div>
+              </div>
+
+              {/* Информация о компании */}
+              <div className="form-section">
+                <h3>Информация о компании</h3>
+                <div className="form-grid">
+                  <div className="form-group">
+                    <label htmlFor="companyName">
+                      Название компании <span className="required">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      id="companyName"
+                      name="companyName"
+                      value={formData.companyName}
+                      onChange={handleInputChange}
+                      placeholder="ТОО «Компания»"
+                      required
+                    />
+                  </div>
+
+                  <div className="form-group">
+                    <label htmlFor="bin">
+                      ИИН/БИН <span className="required">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      id="bin"
+                      name="bin"
+                      value={formData.bin}
+                      onChange={handleInputChange}
+                      placeholder="123456789012"
+                      required
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Контактные данные */}
+              <div className="form-section">
+                <h3>Контактное лицо</h3>
+                <div className="form-grid">
+                  <div className="form-group">
+                    <label htmlFor="contactPerson">
+                      ФИО контактного лица <span className="required">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      id="contactPerson"
+                      name="contactPerson"
+                      value={formData.contactPerson}
+                      onChange={handleInputChange}
+                      placeholder="Иванов Иван Иванович"
+                      required
+                    />
+                  </div>
+
+                  <div className="form-group">
+                    <label htmlFor="phone">
+                      Телефон <span className="required">*</span>
+                    </label>
+                    <input
+                      type="tel"
+                      id="phone"
+                      name="phone"
+                      value={formData.phone}
+                      onChange={handleInputChange}
+                      placeholder="+7 (___) ___-__-__"
+                      required
+                    />
+                  </div>
+
+                  <div className="form-group">
+                    <label htmlFor="email">
+                      Email <span className="required">*</span>
+                    </label>
+                    <input
+                      type="email"
+                      id="email"
+                      name="email"
+                      value={formData.email}
+                      onChange={handleInputChange}
+                      placeholder="example@company.kz"
+                      required
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Описание услуги */}
+              <div className="form-section">
+                <h3>О вашем предложении</h3>
+                <div className="form-group">
+                  <label htmlFor="description">
+                    Краткое описание услуги или товара
+                  </label>
+                  <textarea
+                    id="description"
+                    name="description"
+                    value={formData.description}
+                    onChange={handleInputChange}
+                    placeholder="Расскажите о вашем предложении для клиентов банка..."
+                    rows="4"
+                  />
+                </div>
+              </div>
+
+              {/* Кнопки */}
+              <div className="form-actions">
+                <button type="button" className="cancel-button" onClick={() => setSelectedTariff(null)}>
+                  Отменить
+                </button>
+                <button type="submit" className="submit-button">
+                  Отправить заявку
+                </button>
+              </div>
+            </form>
+          </div>
+        </section>
+      )}
 
       {/* Contact Section */}
       <section className="contact-section">
