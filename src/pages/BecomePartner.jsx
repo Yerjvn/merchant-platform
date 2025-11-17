@@ -6,6 +6,7 @@ const BecomePartner = () => {
   const [formData, setFormData] = useState({
     companyName: '',
     bin: '',
+    category: '',
     contactPerson: '',
     phone: '',
     email: '',
@@ -16,6 +17,27 @@ const BecomePartner = () => {
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [submittedEmail, setSubmittedEmail] = useState('');
   const applicationFormRef = useRef(null);
+
+  // Категории компаний
+  const categories = [
+    'Автосфера',
+    'IT и технологии',
+    'Техника и электроника',
+    'Недвижимость',
+    'Строительство и ремонт',
+    'Образование',
+    'Финансы и банки',
+    'Медицина и здоровье',
+    'Спорт и фитнес',
+    'Красота и уход',
+    'Туризм и отдых',
+    'Ресторан и кафе',
+    'Доставка и логистика',
+    'Юридические услуги',
+    'Консалтинг',
+    'Телекоммуникации',
+    'Другое'
+  ];
 
   const stats = [
     { value: '500K+', label: 'Активных пользователей' },
@@ -137,13 +159,8 @@ const BecomePartner = () => {
     e.preventDefault();
     
     // Валидация
-    if (!formData.companyName || !formData.bin || !formData.contactPerson || !formData.phone || !formData.email) {
+    if (!formData.companyName || !formData.bin || !formData.category || !formData.contactPerson || !formData.phone || !formData.email) {
       alert('Пожалуйста, заполните все обязательные поля');
-      return;
-    }
-
-    if (!selectedTariff) {
-      alert('Пожалуйста, выберите тариф');
       return;
     }
 
@@ -164,6 +181,7 @@ const BecomePartner = () => {
     setFormData({
       companyName: '',
       bin: '',
+      category: '',
       contactPerson: '',
       phone: '',
       email: '',
@@ -333,13 +351,12 @@ const BecomePartner = () => {
       </section>
 
       {/* Application Form Section */}
-      {selectedTariff && (
-        <section className="application-form-section" ref={applicationFormRef}>
-          <div className="form-container">
-            <div className="form-header">
-              <h2>Оставить заявку на тариф "{getSelectedTariffName()}"</h2>
-              <p>Заполните форму, и наш менеджер свяжется с вами для заключения договора</p>
-            </div>
+      <section className="application-form-section" ref={applicationFormRef}>
+        <div className="form-container">
+          <div className="form-header">
+            <h2>Информация о компании</h2>
+            <p>Заполните форму, и наш менеджер свяжется с вами для заключения договора</p>
+          </div>
 
             <form onSubmit={handleSubmitApplication} className="application-form">
               {/* Логотип компании */}
@@ -408,6 +425,24 @@ const BecomePartner = () => {
                       placeholder="123456789012"
                       required
                     />
+                  </div>
+
+                  <div className="form-group">
+                    <label htmlFor="category">
+                      Категория компании <span className="required">*</span>
+                    </label>
+                    <select
+                      id="category"
+                      name="category"
+                      value={formData.category}
+                      onChange={handleInputChange}
+                      required
+                    >
+                      <option value="">Выберите категорию</option>
+                      {categories.map((cat, index) => (
+                        <option key={index} value={cat}>{cat}</option>
+                      ))}
+                    </select>
                   </div>
                 </div>
               </div>
@@ -483,9 +518,6 @@ const BecomePartner = () => {
 
               {/* Кнопки */}
               <div className="form-actions">
-                <button type="button" className="cancel-button" onClick={() => setSelectedTariff(null)}>
-                  Отменить
-                </button>
                 <button type="submit" className="submit-button">
                   Отправить заявку
                 </button>
@@ -493,7 +525,6 @@ const BecomePartner = () => {
             </form>
           </div>
         </section>
-      )}
 
       {/* Contact Section */}
       <section className="contact-section">

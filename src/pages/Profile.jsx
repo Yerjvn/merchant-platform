@@ -129,11 +129,33 @@ const Profile = () => {
   const [newCard, setNewCard] = useState({
     name: '',
     description: '',
+    category: '',
     discount: '',
     promoCode: '',
     image: null,
     icon: '📦',
   });
+
+  // Категории компаний
+  const categories = [
+    'Автосфера',
+    'IT и технологии',
+    'Техника и электроника',
+    'Недвижимость',
+    'Строительство и ремонт',
+    'Образование',
+    'Финансы и банки',
+    'Медицина и здоровье',
+    'Спорт и фитнес',
+    'Красота и уход',
+    'Туризм и отдых',
+    'Ресторан и кафе',
+    'Доставка и логистика',
+    'Юридические услуги',
+    'Консалтинг',
+    'Телекоммуникации',
+    'Другое'
+  ];
 
   const handleImageUpload = (e, isEdit = false) => {
     const file = e.target.files[0];
@@ -162,7 +184,7 @@ const Profile = () => {
         createdAt: new Date().toLocaleDateString('ru-RU'),
       };
       setCards([...cards, card]);
-      setNewCard({ name: '', description: '', discount: '', promoCode: '', image: null, icon: '📦' });
+      setNewCard({ name: '', description: '', category: '', discount: '', promoCode: '', image: null, icon: '📦' });
       setShowAddCard(false);
       alert('Карточка успешно добавлена!');
     } else {
@@ -413,6 +435,19 @@ const Profile = () => {
                           placeholder="Название услуги"
                           required
                         />
+                      </div>
+                      <div className="form-group">
+                        <label>Категория *</label>
+                        <select
+                          value={newCard.category}
+                          onChange={(e) => setNewCard({ ...newCard, category: e.target.value })}
+                          required
+                        >
+                          <option value="">Выберите категорию</option>
+                          {categories.map((cat, index) => (
+                            <option key={index} value={cat}>{cat}</option>
+                          ))}
+                        </select>
                       </div>
                       <div className="form-group">
                         <label>Описание *</label>
