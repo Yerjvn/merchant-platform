@@ -49,11 +49,11 @@ const CategorySlider = ({ onCategorySelect }) => {
       >
         {categories.map((category) => (
           <SwiperSlide key={category.id}>
-            <div
-              className="category-card"
-              onClick={() => onCategorySelect && onCategorySelect(category.id)}
-            >
-              <div className="category-icon">
+            <div className="category-card">
+              <div 
+                className="category-icon"
+                onClick={() => onCategorySelect && onCategorySelect(category.id)}
+              >
                 <img src={category.image} alt={category.name} />
               </div>
               <div className="category-name">{category.name}</div>
