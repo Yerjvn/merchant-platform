@@ -1,8 +1,7 @@
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { Navigation, Pagination } from 'swiper/modules';
+import { Navigation } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/navigation';
-import 'swiper/css/pagination';
 import './CategorySlider.css';
 import sportImage from '../assets/sport.png';
 import otdyhImage from '../assets/otdyh.png';
@@ -26,11 +25,11 @@ const CategorySlider = ({ onCategorySelect }) => {
   return (
     <div className="category-slider-container">
       <Swiper
-        modules={[Navigation, Pagination]}
+        modules={[Navigation]}
         spaceBetween={15}
         slidesPerView={2}
         navigation
-        pagination={{ clickable: true }}
+        loop={true}
         breakpoints={{
           640: {
             slidesPerView: 3,

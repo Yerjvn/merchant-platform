@@ -1,12 +1,12 @@
 .category-slider-container {
-  padding: 1.25rem 0 1.25rem 0;
+  padding: 1.25rem 0;
   background: #f9f9f9;
 }
 
 .category-swiper {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 0 2rem 1.5rem 2rem;
+  padding: 0 2rem;
 }
 
 .category-card {
@@ -57,7 +57,7 @@
   }
 
   .category-swiper {
-    padding: 0 1rem 1.25rem 1rem;
+    padding: 0 1rem;
   }
 
   .category-card {
