@@ -2,6 +2,19 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getFavorites } from '../utils/favorites';
 import { isPartner, toggleUserRole } from '../utils/userRole';
+import { 
+  BarChart3, 
+  CreditCard, 
+  Star, 
+  TrendingUp, 
+  Settings, 
+  User, 
+  Building2, 
+  LogOut,
+  Eye,
+  MousePointerClick,
+  CheckCircle
+} from 'lucide-react';
 import './Profile.css';
 import kazakhtelecomBanner from '../assets/Kazakhtelecom Banner 800x450.webp';
 import biGroupImage from '../assets/bi-group.jpg';
@@ -236,13 +249,15 @@ const Profile = () => {
                   className={`nav-item ${activeTab === 'overview' ? 'active' : ''}`}
                   onClick={() => setActiveTab('overview')}
                 >
-                  📊 Обзор
+                  <BarChart3 size={18} />
+                  <span>Обзор</span>
                 </button>
                 <button
                   className={`nav-item ${activeTab === 'cards' ? 'active' : ''}`}
                   onClick={() => setActiveTab('cards')}
                 >
-                  🎴 Мои карточки
+                  <CreditCard size={18} />
+                  <span>Мои карточки</span>
                 </button>
               </>
             )}
@@ -252,7 +267,8 @@ const Profile = () => {
               className={`nav-item ${activeTab === 'favorites' ? 'active' : ''}`}
               onClick={() => setActiveTab('favorites')}
             >
-              ⭐ Избранное ({favoriteIds.length})
+              <Star size={18} />
+              <span>Избранное ({favoriteIds.length})</span>
             </button>
             
             {/* Вкладки только для партнеров */}
@@ -262,13 +278,15 @@ const Profile = () => {
                   className={`nav-item ${activeTab === 'analytics' ? 'active' : ''}`}
                   onClick={() => setActiveTab('analytics')}
                 >
-                  📈 Аналитика
+                  <TrendingUp size={18} />
+                  <span>Аналитика</span>
                 </button>
                 <button
                   className={`nav-item ${activeTab === 'tariff' ? 'active' : ''}`}
                   onClick={() => setActiveTab('tariff')}
                 >
-                  💳 Мой тариф
+                  <CreditCard size={18} />
+                  <span>Мой тариф</span>
                 </button>
               </>
             )}
@@ -278,7 +296,8 @@ const Profile = () => {
               className={`nav-item ${activeTab === 'settings' ? 'active' : ''}`}
               onClick={() => setActiveTab('settings')}
             >
-              ⚙️ Настройки
+              <Settings size={18} />
+              <span>Настройки</span>
             </button>
           </nav>
 
@@ -287,11 +306,12 @@ const Profile = () => {
             className="toggle-role-button" 
             onClick={() => toggleUserRole()}
           >
-            {userIsPartner ? '👤 Режим клиента' : '🏢 Режим партнера'}
+            {userIsPartner ? <><User size={18} /> <span>Режим клиента</span></> : <><Building2 size={18} /> <span>Режим партнера</span></>}
           </button>
 
           <button className="logout-button" onClick={() => navigate('/')}>
-            Выйти
+            <LogOut size={18} />
+            <span>Выйти</span>
           </button>
         </aside>
 
@@ -304,7 +324,9 @@ const Profile = () => {
 
               <div className="stats-cards">
                 <div className="stat-card-small">
-                  <div className="stat-icon">👁️</div>
+                  <div className="stat-icon">
+                    <Eye size={24} />
+                  </div>
                   <div className="stat-info">
                     <div className="stat-value">{analytics.totalViews.toLocaleString()}</div>
                     <div className="stat-label">Просмотры</div>
@@ -312,7 +334,9 @@ const Profile = () => {
                   </div>
                 </div>
                 <div className="stat-card-small">
-                  <div className="stat-icon">👆</div>
+                  <div className="stat-icon">
+                    <MousePointerClick size={24} />
+                  </div>
                   <div className="stat-info">
                     <div className="stat-value">{analytics.totalClicks.toLocaleString()}</div>
                     <div className="stat-label">Клики</div>
@@ -320,7 +344,9 @@ const Profile = () => {
                   </div>
                 </div>
                 <div className="stat-card-small">
-                  <div className="stat-icon">✅</div>
+                  <div className="stat-icon">
+                    <CheckCircle size={24} />
+                  </div>
                   <div className="stat-info">
                     <div className="stat-value">{analytics.conversions.toLocaleString()}</div>
                     <div className="stat-label">Конверсии</div>

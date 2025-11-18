@@ -74,6 +74,9 @@
   cursor: pointer;
   transition: all 0.3s;
   color: #666;
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
 }
 
 .nav-item:hover {
@@ -99,6 +102,10 @@
   transition: background 0.3s;
   margin-bottom: 0.5rem;
   margin-top: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
 }
 
 .toggle-role-button:hover {
@@ -114,6 +121,10 @@
   font-size: 1rem;
   cursor: pointer;
   transition: background 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
 }
 
 .logout-button:hover {
