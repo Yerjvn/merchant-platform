@@ -33,25 +33,26 @@ body {
 /* Swiper Navigation Styles */
 .swiper-button-next,
 .swiper-button-prev {
-  color: #10b981 !important;
-  background: white !important;
-  width: 35px !important;
-  height: 35px !important;
-  border-radius: 10px !important;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15) !important;
-  transition: all 0.3s !important;
+  color: white !important;
+  background: #10b981 !important;
+  width: 44px !important;
+  height: 44px !important;
+  border-radius: 50% !important;
+  box-shadow: 0 3px 10px rgba(16, 185, 129, 0.3) !important;
+  transition: all 0.3s ease !important;
+  opacity: 0.9 !important;
 }
 
 .swiper-button-next:hover,
 .swiper-button-prev:hover {
-  background: #10b981 !important;
-  color: white !important;
-  transform: translateY(-2px) !important;
-  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3) !important;
+  background: #059669 !important;
+  transform: scale(1.1) !important;
+  box-shadow: 0 5px 15px rgba(16, 185, 129, 0.4) !important;
+  opacity: 1 !important;
 }
 
 .swiper-button-next::after,
 .swiper-button-prev::after {
-  font-size: 16px !important;
-  font-weight: 700 !important;
+  font-size: 18px !important;
+  font-weight: 900 !important;
 }

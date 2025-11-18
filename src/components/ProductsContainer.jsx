@@ -132,18 +132,6 @@ const ProductsContainer = ({ searchQuery = '', selectedCategory = null }) => {
 
   return (
     <div className="products-container">
-      <div className="products-header">
-        <h2>
-          {searchQuery
-            ? `Результаты поиска: "${searchQuery}"`
-            : selectedCategory
-            ? 'Товары категории'
-            : 'Все товары и услуги'}
-        </h2>
-        <p className="products-count">
-          Найдено: {filteredProducts.length} {filteredProducts.length === 1 ? 'товар' : 'товаров'}
-        </p>
-      </div>
       <div className="products-grid">
         {filteredProducts.length > 0 ? (
           filteredProducts.map((product) => (
