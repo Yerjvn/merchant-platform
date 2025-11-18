@@ -135,14 +135,39 @@
   background: #fff9e6;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 968px) {
   .product-image {
     height: 180px;
   }
 
+  .product-info {
+    padding: 1rem;
+  }
+
+  .product-offer {
+    font-size: 1.15rem;
+  }
+
+  .product-button {
+    margin: 0 1rem 1rem;
+    padding: 0.65rem 1rem;
+    font-size: 0.95rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .product-image {
+    height: 170px;
+  }
+
+  .product-info {
+    padding: 1rem;
+    gap: 0.65rem;
+  }
+
   .product-company {
     font-size: 0.7rem;
-    padding: 0.3rem 0.6rem;
+    padding: 0.35rem 0.65rem;
   }
 
   .product-offer {
@@ -150,15 +175,90 @@
   }
 
   .product-description {
-    font-size: 0.8rem;
+    font-size: 0.85rem;
+  }
+
+  .product-button {
+    margin: 0 1rem 1rem;
+    padding: 0.6rem 1rem;
+    font-size: 0.9rem;
   }
 
   .favorite-button {
     width: 32px;
     height: 32px;
     font-size: 1.1rem;
-    bottom: 1rem;
-    right: 1rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .product-card {
+    border-radius: 10px;
+  }
+
+  .product-image {
+    height: 160px;
+  }
+
+  .product-info {
+    padding: 0.875rem;
+    gap: 0.6rem;
+  }
+
+  .product-company {
+    font-size: 0.65rem;
+    padding: 0.3rem 0.6rem;
+  }
+
+  .product-offer {
+    font-size: 1rem;
+  }
+
+  .product-description {
+    font-size: 0.8rem;
+    line-height: 1.4;
+  }
+
+  .product-button {
+    margin: 0 0.875rem 0.875rem;
+    padding: 0.6rem 0.875rem;
+    font-size: 0.875rem;
+  }
+
+  .favorite-button {
+    width: 30px;
+    height: 30px;
+    font-size: 1rem;
+    bottom: 0.4rem;
+    right: 0.4rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .product-image {
+    height: 180px;
+  }
+
+  .product-info {
+    padding: 1rem;
+  }
+
+  .product-company {
+    font-size: 0.7rem;
+  }
+
+  .product-offer {
+    font-size: 1.125rem;
+  }
+
+  .product-description {
+    font-size: 0.875rem;
+  }
+
+  .product-button {
+    margin: 0 1rem 1rem;
+    padding: 0.7rem 1rem;
+    font-size: 0.9rem;
   }
 }
 
