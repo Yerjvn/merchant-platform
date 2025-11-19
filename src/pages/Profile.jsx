@@ -17,7 +17,10 @@ import {
   Clock,
   AlertCircle,
   Trash2,
-  X
+  X,
+  Archive,
+  Zap,
+  Edit
 } from 'lucide-react';
 import './Profile.css';
 import kazakhtelecomBanner from '../assets/Kazakhtelecom Banner 800x450.webp';
@@ -43,6 +46,8 @@ const Profile = () => {
   const [showModerationModal, setShowModerationModal] = useState(false);
   const [alertModal, setAlertModal] = useState({ show: false, message: '', type: 'success' });
   const [confirmModal, setConfirmModal] = useState({ show: false, message: '', onConfirm: null });
+  const [archiveModal, setArchiveModal] = useState({ show: false, cardId: null });
+  const [archivedCards, setArchivedCards] = useState([]);
 
   // Загрузка избранного при монтировании
   useEffect(() => {
@@ -246,6 +251,34 @@ const Profile = () => {
     });
   };
 
+  const handleArchiveCard = (cardId) => {
+    setArchiveModal({ show: true, cardId });
+  };
+
+  const confirmArchive = () => {
+    const cardToArchive = cards.find(card => card.id === archiveModal.cardId);
+    if (cardToArchive) {
+      setArchivedCards([...archivedCards, { ...cardToArchive, archivedAt: new Date().toLocaleDateString('ru-RU') }]);
+      setCards(cards.filter(card => card.id !== archiveModal.cardId));
+      setArchiveModal({ show: false, cardId: null });
+      setAlertModal({ show: true, message: 'Карточка перемещена в архив', type: 'success' });
+    }
+  };
+
+  const handleRestoreCard = (cardId) => {
+    const cardToRestore = archivedCards.find(card => card.id === cardId);
+    if (cardToRestore) {
+      const { archivedAt, ...restoredCard } = cardToRestore;
+      setCards([...cards, restoredCard]);
+      setArchivedCards(archivedCards.filter(card => card.id !== cardId));
+      setAlertModal({ show: true, message: 'Карточка восстановлена', type: 'success' });
+    }
+  };
+
+  const handlePromoteCard = () => {
+    navigate('/become-partner#tariffs');
+  };
+
   return (
     <div className="profile-page">
       <div className="profile-container">
@@ -274,6 +307,13 @@ const Profile = () => {
                 >
                   <CreditCard size={18} />
                   <span>Мои карточки</span>
+                </button>
+                <button
+                  className={`nav-item ${activeTab === 'archived' ? 'active' : ''}`}
+                  onClick={() => setActiveTab('archived')}
+                >
+                  <Archive size={18} />
+                  <span>Архивированные ({archivedCards.length})</span>
                 </button>
               </>
             )}
@@ -469,10 +509,20 @@ const Profile = () => {
                     </div>
                     <div className="card-actions">
                       <button className="edit-btn" onClick={() => setEditingCard(card)}>
-                        ✏️ Редактировать
+                        <Edit size={16} />
+                        <span>Редактировать</span>
+                      </button>
+                      <button className="promote-btn" onClick={() => handlePromoteCard()}>
+                        <Zap size={16} />
+                        <span>Продвинуть</span>
+                      </button>
+                      <button className="archive-btn" onClick={() => handleArchiveCard(card.id)}>
+                        <Archive size={16} />
+                        <span>Архивировать</span>
                       </button>
                       <button className="delete-btn" onClick={() => handleDeleteCard(card.id)}>
-                        🗑️ Удалить
+                        <Trash2 size={16} />
+                        <span>Удалить</span>
                       </button>
                     </div>
                   </div>
@@ -673,6 +723,65 @@ const Profile = () => {
             </div>
           )}
 
+          {/* Archived Tab - только для партнеров */}
+          {userIsPartner && activeTab === 'archived' && (
+            <div className="tab-content">
+              <div className="tab-header">
+                <h1>Архивированные карточки ({archivedCards.length})</h1>
+              </div>
+
+              {archivedCards.length > 0 ? (
+                <div className="cards-list">
+                  {archivedCards.map(card => (
+                    <div key={card.id} className="card-item archived-card">
+                      <div className="archived-badge">
+                        <Archive size={16} />
+                        <span>Архивировано: {card.archivedAt}</span>
+                      </div>
+                      <div className="card-preview">
+                        {card.image ? (
+                          <img src={card.image} alt={card.name} />
+                        ) : (
+                          <div className="card-icon">{card.icon}</div>
+                        )}
+                      </div>
+                      <div className="card-details">
+                        <h3>{card.name}</h3>
+                        <p>{card.description}</p>
+                        <div className="card-meta">
+                          <span className="card-discount">{card.discount}</span>
+                          <span className="card-promo">Промокод: {card.promoCode}</span>
+                        </div>
+                        <div className="card-stats-mini">
+                          <span>👁️ {card.views}</span>
+                          <span>👆 {card.clicks}</span>
+                        </div>
+                      </div>
+                      <div className="card-actions">
+                        <button className="restore-btn" onClick={() => handleRestoreCard(card.id)}>
+                          <CheckCircle size={16} />
+                          <span>Восстановить</span>
+                        </button>
+                        <button className="delete-btn" onClick={() => handleDeleteCard(card.id)}>
+                          <Trash2 size={16} />
+                          <span>Удалить</span>
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="no-favorites">
+                  <div className="no-favorites-icon">
+                    <Archive size={64} />
+                  </div>
+                  <h2>У вас нет архивированных карточек</h2>
+                  <p>Архивируйте карточки, которые не хотите удалять, но временно не используете</p>
+                </div>
+              )}
+            </div>
+          )}
+
           {/* Analytics Tab - только для партнеров */}
           {userIsPartner && activeTab === 'analytics' && (
             <div className="tab-content">
@@ -850,6 +959,38 @@ const Profile = () => {
                 onClick={confirmModal.onConfirm}
               >
                 Удалить
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Archive Confirm Modal */}
+      {archiveModal.show && (
+        <div className="modal-overlay" onClick={() => setArchiveModal({ show: false, cardId: null })}>
+          <div className="confirm-modal" onClick={(e) => e.stopPropagation()}>
+            <div className="archive-icon-container">
+              <div className="archive-icon">
+                <Archive size={40} strokeWidth={2} />
+              </div>
+            </div>
+            <h3 className="confirm-title">Архивировать карточку?</h3>
+            <p className="confirm-message">
+              Карточка будет скрыта из основного списка и перемещена в раздел "Архивированные". 
+              Вы сможете восстановить её в любое время.
+            </p>
+            <div className="confirm-actions">
+              <button 
+                className="confirm-cancel-btn" 
+                onClick={() => setArchiveModal({ show: false, cardId: null })}
+              >
+                Отмена
+              </button>
+              <button 
+                className="confirm-archive-btn" 
+                onClick={confirmArchive}
+              >
+                Архивировать
               </button>
             </div>
           </div>
