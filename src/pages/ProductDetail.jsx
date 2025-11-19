@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { CheckCircle, Copy } from 'lucide-react';
 import './ProductDetail.css';
 import kazakhtelecomBanner from '../assets/Kazakhtelecom Banner 800x450.webp';
 import biGroupImage from '../assets/bi-group.jpg';
@@ -165,6 +166,7 @@ const ProductDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [isActivated, setIsActivated] = useState(false);
+  const [showCopyAlert, setShowCopyAlert] = useState(false);
   const product = mockProductsData[id];
 
   if (!product) {
@@ -182,7 +184,8 @@ const ProductDetail = () => {
 
   const copyPromoCode = () => {
     navigator.clipboard.writeText(product.promoCode);
-    alert('Промокод скопирован!');
+    setShowCopyAlert(true);
+    setTimeout(() => setShowCopyAlert(false), 2000);
   };
 
   const handleActivate = () => {
@@ -251,6 +254,14 @@ const ProductDetail = () => {
           )}
         </div>
       </div>
+
+      {/* Copy Success Alert */}
+      {showCopyAlert && (
+        <div className="copy-alert">
+          <CheckCircle size={20} />
+          <span>Промокод скопирован!</span>
+        </div>
+      )}
     </div>
   );
 };

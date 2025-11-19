@@ -14,7 +14,10 @@ import {
   Eye,
   MousePointerClick,
   CheckCircle,
-  Clock
+  Clock,
+  AlertCircle,
+  Trash2,
+  X
 } from 'lucide-react';
 import './Profile.css';
 import kazakhtelecomBanner from '../assets/Kazakhtelecom Banner 800x450.webp';
@@ -38,6 +41,8 @@ const Profile = () => {
   const [favoriteIds, setFavoriteIds] = useState([]);
   const [userIsPartner, setUserIsPartner] = useState(isPartner());
   const [showModerationModal, setShowModerationModal] = useState(false);
+  const [alertModal, setAlertModal] = useState({ show: false, message: '', type: 'success' });
+  const [confirmModal, setConfirmModal] = useState({ show: false, message: '', onConfirm: null });
 
   // Загрузка избранного при монтировании
   useEffect(() => {
@@ -217,7 +222,7 @@ const Profile = () => {
       setShowAddCard(false);
       setShowModerationModal(true);
     } else {
-      alert('Заполните обязательные поля');
+      setAlertModal({ show: true, message: 'Заполните обязательные поля', type: 'error' });
     }
   };
 
@@ -225,14 +230,20 @@ const Profile = () => {
     if (editingCard) {
       setCards(cards.map(card => card.id === editingCard.id ? editingCard : card));
       setEditingCard(null);
-      alert('Карточка успешно обновлена!');
+      setAlertModal({ show: true, message: 'Карточка успешно обновлена!', type: 'success' });
     }
   };
 
   const handleDeleteCard = (cardId) => {
-    if (window.confirm('Вы уверены, что хотите удалить эту карточку?')) {
-      setCards(cards.filter(card => card.id !== cardId));
-    }
+    setConfirmModal({
+      show: true,
+      message: 'Вы уверены, что хотите удалить эту карточку?',
+      onConfirm: () => {
+        setCards(cards.filter(card => card.id !== cardId));
+        setConfirmModal({ show: false, message: '', onConfirm: null });
+        setAlertModal({ show: true, message: 'Карточка успешно удалена', type: 'success' });
+      }
+    });
   };
 
   return (
@@ -791,6 +802,56 @@ const Profile = () => {
             <button className="moderation-button" onClick={() => setShowModerationModal(false)}>
               Понятно
             </button>
+          </div>
+        </div>
+      )}
+
+      {/* Alert Modal */}
+      {alertModal.show && (
+        <div className="modal-overlay" onClick={() => setAlertModal({ show: false, message: '', type: 'success' })}>
+          <div className="alert-modal" onClick={(e) => e.stopPropagation()}>
+            <div className={`alert-icon-container ${alertModal.type}`}>
+              <div className="alert-icon">
+                {alertModal.type === 'success' ? (
+                  <CheckCircle size={40} strokeWidth={2} />
+                ) : (
+                  <AlertCircle size={40} strokeWidth={2} />
+                )}
+              </div>
+            </div>
+            <p className="alert-message">{alertModal.message}</p>
+            <button className="alert-button" onClick={() => setAlertModal({ show: false, message: '', type: 'success' })}>
+              OK
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Confirm Modal */}
+      {confirmModal.show && (
+        <div className="modal-overlay" onClick={() => setConfirmModal({ show: false, message: '', onConfirm: null })}>
+          <div className="confirm-modal" onClick={(e) => e.stopPropagation()}>
+            <div className="confirm-icon-container">
+              <div className="confirm-icon">
+                <Trash2 size={40} strokeWidth={2} />
+              </div>
+            </div>
+            <h3 className="confirm-title">Подтверждение</h3>
+            <p className="confirm-message">{confirmModal.message}</p>
+            <div className="confirm-actions">
+              <button 
+                className="confirm-cancel-btn" 
+                onClick={() => setConfirmModal({ show: false, message: '', onConfirm: null })}
+              >
+                Отмена
+              </button>
+              <button 
+                className="confirm-delete-btn" 
+                onClick={confirmModal.onConfirm}
+              >
+                Удалить
+              </button>
+            </div>
           </div>
         </div>
       )}

@@ -1,10 +1,12 @@
 import { useState, useRef, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
+import { AlertCircle } from 'lucide-react';
 import './BecomePartner.css';
 
 const BecomePartner = () => {
   const location = useLocation();
   const [selectedTariff, setSelectedTariff] = useState(null);
+  const [showErrorAlert, setShowErrorAlert] = useState(false);
   const [formData, setFormData] = useState({
     companyName: '',
     bin: '',
@@ -181,7 +183,8 @@ const BecomePartner = () => {
     
     // Валидация
     if (!formData.companyName || !formData.bin || !formData.category || !formData.contactPerson || !formData.phone || !formData.email) {
-      alert('Пожалуйста, заполните все обязательные поля');
+      setShowErrorAlert(true);
+      setTimeout(() => setShowErrorAlert(false), 3000);
       return;
     }
 
@@ -602,6 +605,14 @@ const BecomePartner = () => {
           </div>
         </div>
       </section>
+
+      {/* Validation Error Alert */}
+      {showErrorAlert && (
+        <div className="validation-alert">
+          <AlertCircle size={20} />
+          <span>Пожалуйста, заполните все обязательные поля</span>
+        </div>
+      )}
     </div>
   );
 };
