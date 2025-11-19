@@ -2,18 +2,19 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getFavorites } from '../utils/favorites';
 import { isPartner, toggleUserRole } from '../utils/userRole';
-import { 
-  BarChart3, 
-  CreditCard, 
-  Star, 
-  TrendingUp, 
-  Settings, 
-  User, 
-  Building2, 
+import {
+  BarChart3,
+  CreditCard,
+  Star,
+  TrendingUp,
+  Settings,
+  User,
+  Building2,
   LogOut,
   Eye,
   MousePointerClick,
-  CheckCircle
+  CheckCircle,
+  Clock
 } from 'lucide-react';
 import './Profile.css';
 import kazakhtelecomBanner from '../assets/Kazakhtelecom Banner 800x450.webp';
@@ -36,6 +37,7 @@ const Profile = () => {
   const [editingCard, setEditingCard] = useState(null);
   const [favoriteIds, setFavoriteIds] = useState([]);
   const [userIsPartner, setUserIsPartner] = useState(isPartner());
+  const [showModerationModal, setShowModerationModal] = useState(false);
 
   // Загрузка избранного при монтировании
   useEffect(() => {
@@ -132,6 +134,7 @@ const Profile = () => {
       clicks: 2100,
       conversions: 580,
       status: 'Активна',
+      moderationStatus: 'active',
       createdAt: '15.03.2024',
     },
     {
@@ -146,6 +149,7 @@ const Profile = () => {
       clicks: 1110,
       conversions: 276,
       status: 'Активна',
+      moderationStatus: 'active',
       createdAt: '20.09.2024',
     },
   ]);
@@ -197,20 +201,21 @@ const Profile = () => {
   };
 
   const handleAddCard = () => {
-    if (newCard.name && newCard.description) {
+    if (newCard.name && newCard.description && newCard.category) {
       const card = {
         id: cards.length + 1,
         ...newCard,
         views: 0,
         clicks: 0,
         conversions: 0,
-        status: 'Активна',
+        status: 'На модерации',
+        moderationStatus: 'pending',
         createdAt: new Date().toLocaleDateString('ru-RU'),
       };
       setCards([...cards, card]);
       setNewCard({ name: '', description: '', category: '', discount: '', promoCode: '', image: null, icon: '📦' });
       setShowAddCard(false);
-      alert('Карточка успешно добавлена!');
+      setShowModerationModal(true);
     } else {
       alert('Заполните обязательные поля');
     }
@@ -425,7 +430,13 @@ const Profile = () => {
 
               <div className="cards-list">
                 {cards.map(card => (
-                  <div key={card.id} className="card-item">
+                  <div key={card.id} className={`card-item ${card.moderationStatus === 'pending' ? 'card-pending' : ''}`}>
+                    {card.moderationStatus === 'pending' && (
+                      <div className="moderation-badge">
+                        <span className="badge-icon">⏳</span>
+                        <span className="badge-text">На модерации</span>
+                      </div>
+                    )}
                     <div className="card-preview">
                       {card.image ? (
                         <img src={card.image} alt={card.name} />
@@ -742,6 +753,47 @@ const Profile = () => {
           )}
         </main>
       </div>
+
+      {/* Moderation Success Modal */}
+      {showModerationModal && (
+        <div className="modal-overlay moderation-overlay" onClick={() => setShowModerationModal(false)}>
+          <div className="moderation-modal" onClick={(e) => e.stopPropagation()}>
+            <div className="moderation-icon-container">
+              <div className="moderation-icon">
+                <Clock size={48} strokeWidth={2} />
+              </div>
+            </div>
+            <h2>Карточка отправлена на модерацию</h2>
+            <p className="moderation-text">
+              Ваша карточка успешно создана и отправлена на проверку модераторам. 
+              Обычно процесс модерации занимает от 1 до 24 часов.
+            </p>
+            <div className="moderation-details">
+              <div className="detail-item">
+                <div className="detail-icon">
+                  <CheckCircle size={20} />
+                </div>
+                <div className="detail-text">
+                  <strong>Карточка добавлена</strong>
+                  <span>Вы можете найти её в разделе "Мои карточки"</span>
+                </div>
+              </div>
+              <div className="detail-item">
+                <div className="detail-icon">
+                  <Clock size={20} />
+                </div>
+                <div className="detail-text">
+                  <strong>Ожидание проверки</strong>
+                  <span>Мы уведомим вас о результатах модерации</span>
+                </div>
+              </div>
+            </div>
+            <button className="moderation-button" onClick={() => setShowModerationModal(false)}>
+              Понятно
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
