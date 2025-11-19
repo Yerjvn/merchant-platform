@@ -1,7 +1,9 @@
 import { useState, useRef, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import './BecomePartner.css';
 
 const BecomePartner = () => {
+  const location = useLocation();
   const [selectedTariff, setSelectedTariff] = useState(null);
   const [formData, setFormData] = useState({
     companyName: '',
@@ -20,16 +22,22 @@ const BecomePartner = () => {
 
   // Автоматический скролл к секции при загрузке страницы с hash
   useEffect(() => {
-    const hash = window.location.hash;
-    if (hash) {
-      setTimeout(() => {
+    const scrollToSection = () => {
+      const hash = location.hash || window.location.hash;
+      if (hash) {
         const element = document.querySelector(hash);
         if (element) {
-          element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          const yOffset = -80; // Отступ для header
+          const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
+          window.scrollTo({ top: y, behavior: 'smooth' });
         }
-      }, 100);
-    }
-  }, []);
+      }
+    };
+
+    // Даем время на загрузку контента
+    const timer = setTimeout(scrollToSection, 300);
+    return () => clearTimeout(timer);
+  }, [location]);
 
   // Категории компаний
   const categories = [
