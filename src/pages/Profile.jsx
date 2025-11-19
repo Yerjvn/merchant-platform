@@ -708,7 +708,7 @@ const Profile = () => {
                       <span>{currentTariff.autoRenewal ? 'Включено' : 'Выключено'}</span>
                     </div>
                   </div>
-                  <button className="upgrade-btn" onClick={() => navigate('/become-partner')}>
+                  <button className="upgrade-btn" onClick={() => navigate('/become-partner#tariffs')}>
                     Изменить тариф
                   </button>
                 </div>

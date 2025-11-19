@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import './BecomePartner.css';
 
 const BecomePartner = () => {
@@ -17,6 +17,19 @@ const BecomePartner = () => {
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [submittedEmail, setSubmittedEmail] = useState('');
   const applicationFormRef = useRef(null);
+
+  // Автоматический скролл к секции при загрузке страницы с hash
+  useEffect(() => {
+    const hash = window.location.hash;
+    if (hash) {
+      setTimeout(() => {
+        const element = document.querySelector(hash);
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      }, 100);
+    }
+  }, []);
 
   // Категории компаний
   const categories = [
