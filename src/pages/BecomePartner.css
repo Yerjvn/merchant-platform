@@ -222,6 +222,8 @@
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s, box-shadow 0.3s;
   border: 3px solid transparent;
+  display: flex;
+  flex-direction: column;
 }
 
 .tariff-card:hover {
@@ -332,6 +334,7 @@
   font-weight: 700;
   cursor: pointer;
   transition: background 0.3s;
+  margin-top: auto;
 }
 
 .tariff-button:hover {
