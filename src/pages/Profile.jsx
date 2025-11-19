@@ -313,7 +313,7 @@ const Profile = () => {
                   onClick={() => setActiveTab('archived')}
                 >
                   <Archive size={18} />
-                  <span>Архивированные ({archivedCards.length})</span>
+                  <span>Архив ({archivedCards.length})</span>
                 </button>
               </>
             )}
