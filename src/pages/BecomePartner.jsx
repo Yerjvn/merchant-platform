@@ -341,7 +341,6 @@ const BecomePartner = () => {
               
               <div className="tariff-header">
                 <h3>{tariff.name}</h3>
-                <div className="priority-label">Приоритет #{tariff.priority}</div>
               </div>
               
               <div className="tariff-price">

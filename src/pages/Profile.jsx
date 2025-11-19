@@ -405,7 +405,7 @@ const Profile = () => {
 
               <div className="quick-tariff">
                 <h3>Текущий тариф: {currentTariff.name}</h3>
-                <p>Приоритет #{currentTariff.priority} • {currentTariff.price}/{currentTariff.period}</p>
+                <p>{currentTariff.price}/{currentTariff.period}</p>
                 <button onClick={() => setActiveTab('tariff')} className="view-tariff-btn">
                   Подробнее
                 </button>
@@ -691,10 +691,6 @@ const Profile = () => {
                   <h2>{currentTariff.name}</h2>
                   <div className="tariff-price-large">{currentTariff.price}/{currentTariff.period}</div>
                   <div className="tariff-details">
-                    <div className="tariff-detail">
-                      <span>Приоритет:</span>
-                      <span>#{currentTariff.priority}</span>
-                    </div>
                     <div className="tariff-detail">
                       <span>Дата начала:</span>
                       <span>{currentTariff.startDate}</span>
