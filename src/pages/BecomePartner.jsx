@@ -3,6 +3,12 @@ import { useLocation } from 'react-router-dom';
 import { AlertCircle } from 'lucide-react';
 import './BecomePartner.css';
 
+// Partner logos
+import airAstanaLogo from '../assets/Air-Astana-logo.png';
+import kazakhtelecomLogo from '../assets/logo_kazahtelekom.png';
+import biGroupLogo from '../assets/New_Logo_BI_Group.png';
+import pwcLogo from '../assets/PwC_Company_Logo.svg';
+
 const BecomePartner = () => {
   const location = useLocation();
   const [selectedTariff, setSelectedTariff] = useState(null);
@@ -138,16 +144,10 @@ const BecomePartner = () => {
   ];
 
   const partners = [
-    { name: 'Казахтелеком', logo: '📡' },
-    { name: 'Air Astana', logo: '✈️' },
-    { name: 'Beeline KZ', logo: '📱' },
-    { name: 'KEGOC', logo: '⚡' },
-    { name: 'Казпочта', logo: '📮' },
-    { name: 'Tele2 KZ', logo: '📞' },
-    { name: 'BI GROUP', logo: '🏢' },
-    { name: 'Samruk-Kazyna', logo: '🏛️' },
-    { name: 'KazMunayGas', logo: '⛽' },
-    { name: 'KPMG Kazakhstan', logo: '💼' },
+    { name: 'Казахтелеком', logo: kazakhtelecomLogo },
+    { name: 'Air Astana', logo: airAstanaLogo },
+    { name: 'BI GROUP', logo: biGroupLogo },
+    { name: 'PwC', logo: pwcLogo },
   ];
 
   const handleTariffSelect = (tariffId) => {
@@ -320,8 +320,7 @@ const BecomePartner = () => {
         <div className="partners-grid">
           {partners.map((partner, index) => (
             <div key={index} className="partner-logo">
-              <span className="partner-emoji">{partner.logo}</span>
-              <span className="partner-name">{partner.name}</span>
+              <img src={partner.logo} alt={partner.name} className="partner-logo-img" />
             </div>
           ))}
         </div>
