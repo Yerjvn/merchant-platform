@@ -174,7 +174,21 @@
   }
 
   .search-form {
-    display: none;
+    max-width: 200px;
+  }
+
+  .search-input {
+    font-size: 0.875rem;
+    padding: 0.6rem 0.75rem;
+  }
+
+  .search-button {
+    padding: 0.4rem;
+  }
+
+  .search-button svg {
+    width: 16px;
+    height: 16px;
   }
 
   .header-actions {
@@ -184,33 +198,81 @@
 
   .partner-button,
   .profile-button {
-    padding: 0.5rem 1rem;
-    font-size: 0.85rem;
+    padding: 0.5rem 0.75rem;
+    font-size: 0.8rem;
     white-space: nowrap;
   }
 }
 
 @media (max-width: 480px) {
   .header {
-    padding: 0.4rem 0;
+    padding: 0.5rem 0;
   }
 
   .header-container {
-    padding: 0 0.625rem;
+    padding: 0 0.5rem;
     gap: 0.4rem;
+    flex-wrap: nowrap;
   }
 
   .logo-svg {
-    height: 20px;
+    height: 18px;
   }
 
-  .partner-button {
-    display: none;
+  .search-form {
+    flex: 1;
+    max-width: none;
+    min-width: 120px;
   }
 
-  .profile-button {
-    padding: 0.45rem 0.875rem;
+  .search-input {
     font-size: 0.8rem;
+    padding: 0.5rem 2.5rem 0.5rem 0.6rem;
+    border-width: 1px;
+  }
+
+  .search-button {
+    padding: 0.3rem;
+    right: 4px;
+  }
+
+  .search-button svg {
+    width: 14px;
+    height: 14px;
+  }
+
+  .header-actions {
+    gap: 0.4rem;
+    flex-shrink: 0;
+  }
+
+  .partner-button,
+  .profile-button {
+    padding: 0.5rem 0.6rem;
+    font-size: 0.75rem;
+    white-space: nowrap;
+  }
+}
+
+@media (max-width: 380px) {
+  .header-container {
+    padding: 0 0.4rem;
+    gap: 0.3rem;
+  }
+
+  .logo-svg {
+    height: 16px;
+  }
+
+  .search-input {
+    font-size: 0.75rem;
+    padding: 0.45rem 2.5rem 0.45rem 0.5rem;
+  }
+
+  .partner-button,
+  .profile-button {
+    padding: 0.45rem 0.5rem;
+    font-size: 0.7rem;
   }
 }
 
