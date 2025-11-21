@@ -503,8 +503,8 @@ const Profile = () => {
                         <span className="card-promo">Промокод: {card.promoCode}</span>
                       </div>
                       <div className="card-stats-mini">
-                        <span>👁️ {card.views}</span>
-                        <span>👆 {card.clicks}</span>
+                        <span><Eye size={16} /> {card.views}</span>
+                        <span><MousePointerClick size={16} /> {card.clicks}</span>
                       </div>
                     </div>
                     <div className="card-actions">
@@ -753,8 +753,8 @@ const Profile = () => {
                           <span className="card-promo">Промокод: {card.promoCode}</span>
                         </div>
                         <div className="card-stats-mini">
-                          <span>👁️ {card.views}</span>
-                          <span>👆 {card.clicks}</span>
+                          <span><Eye size={16} /> {card.views}</span>
+                          <span><MousePointerClick size={16} /> {card.clicks}</span>
                         </div>
                       </div>
                       <div className="card-actions">

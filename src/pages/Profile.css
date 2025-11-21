@@ -371,6 +371,16 @@
   color: #666;
 }
 
+.card-stats-mini span {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.card-stats-mini svg {
+  flex-shrink: 0;
+}
+
 .card-actions {
   display: flex;
   flex-direction: column;
